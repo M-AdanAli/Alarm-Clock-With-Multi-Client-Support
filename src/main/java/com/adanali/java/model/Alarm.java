@@ -2,7 +2,7 @@ package com.adanali.java.model;
 
 import java.time.LocalDateTime;
 
-public class Alarm implements Comparable<Alarm>{
+public class Alarm{
 
     private LocalDateTime dateTime;
     private String title;
@@ -18,10 +18,5 @@ public class Alarm implements Comparable<Alarm>{
 
     public LocalDateTime getDateTime() {
         return dateTime;
-    }
-
-    @Override
-    public int compareTo(Alarm other) {
-        return this.dateTime.compareTo(other.getDateTime());
     }
 }
