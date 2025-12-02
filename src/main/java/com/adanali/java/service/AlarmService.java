@@ -1,9 +1,12 @@
-import java.time.Clock;
+package com.adanali.java.service;
+
+import com.adanali.java.model.Alarm;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.concurrent.*;
 
-public enum AlarmClock {
+public enum AlarmService {
     INSTANCE(5);
 
     private final ArrayBlockingQueue<Alarm> alarms;
@@ -11,7 +14,7 @@ public enum AlarmClock {
     Semaphore spots;
     Semaphore clientSpots;
 
-    AlarmClock(int maxAlarms){
+    AlarmService(int maxAlarms){
         MAX_ALARMS = maxAlarms;
         alarms = new ArrayBlockingQueue<>(MAX_ALARMS);
         spots = new Semaphore(MAX_ALARMS);

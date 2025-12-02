@@ -1,3 +1,5 @@
+package com.adanali.java.model;
+
 import java.time.LocalDateTime;
 
 public class Alarm implements Comparable<Alarm>{

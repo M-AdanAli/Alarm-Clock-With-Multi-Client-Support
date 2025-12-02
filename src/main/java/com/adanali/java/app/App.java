@@ -1,9 +1,12 @@
+import com.adanali.java.model.Alarm;
+import com.adanali.java.service.AlarmService;
+
 void main() throws InterruptedException {
     for (int i = 0; i < 10; i++) {
         int index = i;
         Thread thread = new Thread(() -> {
             Alarm alarm = new Alarm(LocalDateTime.now().plusSeconds(index+10),"Alarm "+index);
-            AlarmClock.INSTANCE.addAlarm(alarm);
+            AlarmService.INSTANCE.addAlarm(alarm);
         });
         thread.start();
         Thread.sleep(100);
@@ -11,7 +14,7 @@ void main() throws InterruptedException {
 
     Thread.sleep(1000);
     for (int i = 0; i < 10; i++) {
-        Thread clientThread = new Thread(AlarmClock.INSTANCE::startAlarming);
+        Thread clientThread = new Thread(AlarmService.INSTANCE::startAlarming);
         clientThread.start();
     }
 }
