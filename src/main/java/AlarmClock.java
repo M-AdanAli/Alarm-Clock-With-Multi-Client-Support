@@ -1,6 +1,6 @@
+import java.time.Clock;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Comparator;
 import java.util.concurrent.*;
 
 public enum AlarmClock {
@@ -8,15 +8,19 @@ public enum AlarmClock {
 
     private final ArrayBlockingQueue<Alarm> alarms;
     private final int MAX_ALARMS;
+    Semaphore spots;
+    Semaphore clientSpots;
 
     AlarmClock(int maxAlarms){
         MAX_ALARMS = maxAlarms;
         alarms = new ArrayBlockingQueue<>(MAX_ALARMS);
+        spots = new Semaphore(MAX_ALARMS);
+        clientSpots = new Semaphore(MAX_ALARMS);
     }
 
     public void addAlarm(Alarm alarm){
-        synchronized (this){
             try {
+                spots.acquire();
                 if (alarm.getDateTime().isAfter(LocalDateTime.now())){
                     alarms.put(alarm);
                     System.out.println("Added "+alarm.getTitle()+" for : "+alarm.getDateTime());
@@ -24,11 +28,11 @@ public enum AlarmClock {
             }catch (InterruptedException e){
                 System.out.println(e);
             }
-        }
     }
 
     public void startAlarming(){
         try {
+            clientSpots.acquire();
             Alarm alarm = alarms.take();
             Duration durationUntilAlarm = Duration.between(LocalDateTime.now(),alarm.getDateTime());
             if (!durationUntilAlarm.isNegative()){
@@ -37,6 +41,9 @@ public enum AlarmClock {
             }
         } catch (InterruptedException e) {
             System.out.println(e);
+        } finally {
+            spots.release();
+            clientSpots.release();
         }
     }
 }

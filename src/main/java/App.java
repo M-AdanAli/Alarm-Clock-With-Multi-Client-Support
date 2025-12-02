@@ -10,7 +10,8 @@ void main() throws InterruptedException {
     }
 
     Thread.sleep(1000);
-    while (true){
-        AlarmClock.INSTANCE.startAlarming();
+    for (int i = 0; i < 10; i++) {
+        Thread clientThread = new Thread(AlarmClock.INSTANCE::startAlarming);
+        clientThread.start();
     }
 }
